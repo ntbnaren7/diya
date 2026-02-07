@@ -146,7 +146,7 @@ export default function WhyDiya() {
             <div className="atmosphere" style={{ position: 'absolute', width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}>
 
                 {/* 1. Curved Arrow (Top Right of Text -> First Card) */}
-                <svg style={{ position: 'absolute', top: '180px', right: '15%', width: '150px', height: '150px', transform: 'rotate(10deg)' }}>
+                <svg className="atmosphere-arrow" style={{ position: 'absolute', top: '180px', right: '15%', width: '150px', height: '150px', transform: 'rotate(10deg)' }}>
                     <path
                         d="M20,20 Q100,20 100,100"
                         fill="none" stroke="#333" strokeWidth="2" strokeDasharray="5,5" markerEnd="url(#arrowhead)"
@@ -159,7 +159,7 @@ export default function WhyDiya() {
                 </svg>
 
                 {/* 2. "Elevate your brand" Text */}
-                <div style={{
+                <div className="atmosphere-text" style={{
                     position: 'absolute',
                     top: '160px', right: '8%',
                     fontFamily: '"Caveat", cursive, sans-serif', // Fallback to cursive
@@ -171,7 +171,7 @@ export default function WhyDiya() {
                 </div>
 
                 {/* 3. Scribble Loop (Bottom Left) */}
-                <svg style={{ position: 'absolute', bottom: '10%', left: '5%', width: '100px', height: '100px', opacity: 0.5 }}>
+                <svg className="atmosphere-scribble" style={{ position: 'absolute', bottom: '10%', left: '5%', width: '100px', height: '100px', opacity: 0.5 }}>
                     <path
                         d="M10,50 Q30,10 50,50 T90,50 T130,50"
                         fill="none" stroke="#00c237" strokeWidth="3" strokeLinecap="round"
@@ -179,7 +179,7 @@ export default function WhyDiya() {
                 </svg>
 
                 {/* 4. Little Star (Top Left) */}
-                <svg style={{ position: 'absolute', top: '220px', left: '10%', width: '40px', height: '40px' }}>
+                <svg className="atmosphere-star" style={{ position: 'absolute', top: '220px', left: '10%', width: '40px', height: '40px' }}>
                     <path d="M20,0 L25,15 L40,20 L25,25 L20,40 L15,25 L0,20 L15,15 Z" fill="#ff4500" opacity="0.8" />
                 </svg>
 

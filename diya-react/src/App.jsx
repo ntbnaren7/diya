@@ -3,6 +3,7 @@ import Lenis from '@studio-freight/lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
+import BrandStatement from './components/BrandStatement'; // NEW: The "Why DIYA" typographic section
 import Manifesto from './components/Manifesto';
 import WhyDiya from './components/WhyDiya';
 import Footer from './components/Footer';
@@ -47,23 +48,14 @@ function App() {
     }
   }, []);
 
-  // Background Fade-In Logic (REMOVED: User requested background throughout)
-  useEffect(() => {
-    // Determine opacity: user requested "throughout", so we set it visible immediately.
-    // Logic: Force opacity 1 instantly.
-    gsap.set(".ambient-background", { opacity: 1 });
-  }, []);
-
   return (
     <div className="app">
-      <div className="ambient-background">
-        <div className="orb orb-1"></div>
-        <div className="orb orb-2"></div>
-      </div>
+
       <Navbar activeSection={activeSection} />
       <main>
         <section id="home"><Hero /></section>
         <Marquee />
+        <BrandStatement /> {/* NEW: "Why DIYA" Statement */}
         <Manifesto />
         <WhyDiya />
         <footer id="connect"><Footer /></footer>

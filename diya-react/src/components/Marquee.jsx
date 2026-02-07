@@ -69,7 +69,7 @@ export default function Marquee() {
     }, []);
 
     return (
-        <section id="marquee-section" style={{ padding: '4rem 0', overflow: 'hidden', background: 'transparent', borderBottom: 'none' }} ref={containerRef}>
+        <section id="marquee-section" style={{ padding: '4rem 0 1rem 0', overflow: 'hidden', background: 'transparent', borderBottom: 'none' }} ref={containerRef}>
             <div className="marquee-container" style={{ display: 'flex', whiteSpace: 'nowrap', width: 'fit-content' }}>
                 <div className="marquee-text" ref={textRef} style={{ display: 'flex', willChange: 'transform' }}>
                     {/* Tripled content for infinite loop illusion */}

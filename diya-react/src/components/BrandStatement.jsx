@@ -170,12 +170,12 @@ export default function BrandStatement() {
         <section
             ref={sectionRef}
             style={{
-                minHeight: '80vh',
+                minHeight: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
-                padding: '2rem 8vw 8rem 8vw',
+                padding: '2rem 8vw 4rem 8vw',
                 background: 'transparent',
                 position: 'relative' // For absolute badges
             }}

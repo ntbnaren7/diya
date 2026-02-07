@@ -3,9 +3,10 @@ import Lenis from '@studio-freight/lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
-import BrandStatement from './components/BrandStatement'; // NEW: The "Why DIYA" typographic section
+import BrandStatement from './components/BrandStatement';
 import Manifesto from './components/Manifesto';
 import WhyDiya from './components/WhyDiya';
+import Pricing from './components/Pricing'; // NEW: Smoke & Glass Pricing
 import Footer from './components/Footer';
 import './index.css';
 import gsap from 'gsap';
@@ -58,6 +59,7 @@ function App() {
         <BrandStatement /> {/* NEW: "Why DIYA" Statement */}
         <Manifesto />
         <WhyDiya />
+        <Pricing /> {/* NEW: Features/Pricing Section */}
         <footer id="connect"><Footer /></footer>
       </main>
     </div>

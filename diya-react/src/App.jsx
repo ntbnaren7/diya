@@ -5,6 +5,7 @@ import BrandIntake from './components/BrandIntake';
 import AnalysisLoader from './components/AnalysisLoader';
 import BrandPersona from './components/BrandPersona';
 import ContentDirection from './components/ContentDirection';
+import MorphLoader from './components/ui/MorphLoader';
 import './index.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/brand-analysis" element={<AnalysisLoader />} />
         <Route path="/brand-persona" element={<BrandPersona />} />
         <Route path="/content-direction" element={<ContentDirection />} />
+        <Route path="/generating-plan" element={<MorphLoader />} />
       </Routes>
     </Router>
   );

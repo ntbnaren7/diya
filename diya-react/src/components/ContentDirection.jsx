@@ -162,7 +162,12 @@ export default function ContentDirection() {
             .call(() => {
                 // Save state if needed (context/redux)
                 console.log("Plan:", { platforms: selectedPlatforms, freq: `${freqValue}/${freqMode}` });
-                navigate('/brand-calendar'); // Or wherever next step is
+                navigate('/generating-plan', {
+                    state: {
+                        platforms: selectedPlatforms,
+                        frequency: `${freqValue}/${freqMode}`
+                    }
+                });
             });
     };
 

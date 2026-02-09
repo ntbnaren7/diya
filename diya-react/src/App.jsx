@@ -6,6 +6,7 @@ import AnalysisLoader from './components/AnalysisLoader';
 import BrandPersona from './components/BrandPersona';
 import ContentDirection from './components/ContentDirection';
 import MorphLoader from './components/ui/MorphLoader';
+import BrandCalendarPage from './components/BrandCalendarPage';
 import './index.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/brand-persona" element={<BrandPersona />} />
         <Route path="/content-direction" element={<ContentDirection />} />
         <Route path="/generating-plan" element={<MorphLoader />} />
+        <Route path="/brand-calendar" element={<BrandCalendarPage />} />
       </Routes>
     </Router>
   );

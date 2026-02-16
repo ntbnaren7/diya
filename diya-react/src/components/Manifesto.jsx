@@ -288,7 +288,7 @@ export default function Manifesto() {
                 }}>
                     {visionItems.map((item, i) => (
                         <div key={i} className="slot" style={{
-                            position: 'relative', width: '12vw', height: '15vw',
+                            position: 'relative', width: 'min(12vw, 160px)', height: 'min(15vw, 200px)',
                             display: 'flex', justifyContent: 'center', alignItems: 'center',
                             transformStyle: 'preserve-3d'
                         }}>
@@ -309,7 +309,7 @@ export default function Manifesto() {
 
                             {/* Letter */}
                             <span ref={el => lettersRef.current[i] = el} style={{
-                                position: 'absolute', fontFamily: 'var(--font-heading)', fontSize: '15vw', fontWeight: '900',
+                                position: 'absolute', fontFamily: 'var(--font-heading)', fontSize: 'min(15vw, 200px)', fontWeight: '900',
                                 lineHeight: '100%', zIndex: 3, display: 'block', textAlign: 'center', backfaceVisibility: 'hidden',
                                 color: 'transparent', WebkitTextStroke: '2px black'
                             }}>
@@ -322,7 +322,7 @@ export default function Manifesto() {
                 {/* MARQUEE */}
                 {acronymData.map((item, i) => (
                     <div key={i} ref={el => wordsRef.current[i] = el} style={{
-                        position: 'absolute', fontFamily: 'var(--font-heading)', fontSize: '12vw', fontWeight: '800',
+                        position: 'absolute', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 12vw, 180px)', fontWeight: '800',
                         color: 'transparent', WebkitTextStroke: '1.5px black', opacity: 0, textAlign: 'center', whiteSpace: 'nowrap', zIndex: 10,
                         transform: 'translateY(-5vh)'
                     }}>

@@ -30,8 +30,7 @@
     /* Align to top to use upper space */
     /* Robust vertical centering removed in favor of top-loading */
     position: relative;
-    padding-top: 12vh;
-    /* Adjusted to 12vh (approx 120px) to sit just below navbar */
+    padding-top: 10vh;
     padding-bottom: 0;
     border-bottom: none !important;
 }
@@ -414,8 +413,7 @@ ul {
     /* Larger */
     font-weight: 500;
     /* Semi-bold */
-    margin-bottom: 1.5rem;
-    /* Reduced from 3rem */
+    margin-bottom: 1rem;
     color: var(--text-color);
 
     /* Premium styling without background-clip artifacts */

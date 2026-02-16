@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
-import SystemNav from './SystemNav';
+import AppHeader from './ui/AppHeader';
+import ActionDock from './ui/ActionDock';
 import '../css/brand-builder.css';
 
 // --- Constants ---
@@ -94,7 +95,7 @@ export default function BrandBuilder() {
             // Dock
             entranceTl.fromTo(dockRef.current,
                 { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)' },
+                { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)', clearProps: 'transform' },
                 '-=0.2'
             );
 
@@ -173,7 +174,7 @@ export default function BrandBuilder() {
     }, [isTransitioning]);
 
     const goNext = () => {
-        if (isTransitioning) return;
+        if (isTransitioning || !canProceed) return;
         if (currentStep >= STEPS.length - 1) {
             const tl = gsap.timeline({ onComplete: () => navigate('/brand-persona') });
             tl.to('.bb-stage > *', { opacity: 0, y: -20, duration: 0.3, stagger: 0.04, ease: 'power2.in' })
@@ -374,7 +375,7 @@ export default function BrandBuilder() {
     };
 
     return (
-        <div className="bb-page" ref={pageRef}>
+        <div className="bb-page" ref={pageRef} style={{ paddingTop: '80px' }}>
             {/* Aurora */}
             <div className="bb-aurora">
                 <div className="bb-aurora-blob"
@@ -385,7 +386,7 @@ export default function BrandBuilder() {
                     style={selectedPalette !== null ? { background: COLOR_PALETTES[selectedPalette].colors[2] || COLOR_PALETTES[selectedPalette].colors[0] } : {}} />
             </div>
 
-            <SystemNav step={currentStep + 1} totalSteps={STEPS.length} onBack={goBack} />
+            <AppHeader />
 
             {/* Stage */}
             <div className="bb-stage">
@@ -394,7 +395,7 @@ export default function BrandBuilder() {
                     {STEPS.map((s, i) => (
                         <div key={s} className={`bb-progress-dot ${i === currentStep ? 'active' : ''} ${i < currentStep ? 'done' : ''}`} />
                     ))}
-                    <span className="bb-progress-label">{STEPS[currentStep]}</span>
+                    <span className="bb-progress-label">{STEPS[currentStep]} </span>
                 </div>
 
                 {/* Header */}
@@ -409,15 +410,14 @@ export default function BrandBuilder() {
             </div>
 
             {/* Dock */}
-            <div className="bb-dock" ref={dockRef}>
-                <button className="bb-dock-back" onClick={goBack}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <button className="bb-dock-next" disabled={!canProceed} onClick={goNext}>
-                    {nextLabel}<span className="arr">→</span>
-                </button>
+            <div ref={dockRef}>
+                <ActionDock
+                    onBack={goBack}
+                    onNext={goNext}
+                    nextLabel={nextLabel}
+                    isNextDisabled={!canProceed}
+                    backLabel={currentStep === 0 ? "Back to Intake" : "Previous Step"}
+                />
             </div>
         </div>
     );

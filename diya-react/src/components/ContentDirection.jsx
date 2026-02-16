@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../css/content-direction.css';
-import ModernButton from './ui/ModernButton';
-import SystemNav from './SystemNav';
+import AppHeader from './ui/AppHeader';
+import ActionDock from './ui/ActionDock';
 import AbstractBackground from './AbstractBackground';
 import HandwrittenDecor from './HandwrittenDecor';
 
@@ -228,6 +228,10 @@ export default function ContentDirection() {
                     "-=0.4"
                 );
 
+            // Animate AppHeader
+            gsap.set('.app-header', { y: -20, opacity: 0 });
+            gsap.to('.app-header', { y: 0, opacity: 1, duration: 0.8, delay: 1, ease: "power2.out" });
+
             // 4. Subtext Cinematic Blur Entry
             gsap.from(".sub-char", {
                 opacity: 0,
@@ -244,7 +248,7 @@ export default function ContentDirection() {
             });
 
             // 5. Scroll Animations
-            const sections = gsap.utils.toArray('.direction-section, .delegation-section, .strategic-input-section');
+            const sections = gsap.utils.toArray('.direction-section, .strategic-input-section');
             sections.forEach((section, i) => {
                 gsap.from(section, {
                     scrollTrigger: {
@@ -287,7 +291,7 @@ export default function ContentDirection() {
     );
 
     return (
-        <div className="direction-page" ref={containerRef}>
+        <div className="direction-page" ref={containerRef} style={{ paddingBottom: '120px' }}>
             {/* ATMOSPHERE LAYERS */}
             <div className="atmosphere-background"></div>
             <div className="noise-overlay"></div>
@@ -299,7 +303,7 @@ export default function ContentDirection() {
             <HandwrittenDecor />
 
             {/* Navigation */}
-            <SystemNav step={2} totalSteps={3} onBack={() => navigate('/brand-persona')} />
+            <AppHeader />
 
             {/* Header */}
             <header className="direction-header">
@@ -464,12 +468,14 @@ export default function ContentDirection() {
                     </div>
                 </section>
 
-                {/* 3. CTA Section */}
-                <section className="delegation-section">
-                    <ModernButton onClick={handleDelegate}>
-                        Let DIYA plan the content
-                    </ModernButton>
-                </section>
+                {/* Action Dock */}
+                <ActionDock
+                    onBack={() => navigate('/brand-persona')}
+                    backLabel="Back to Persona"
+                    onNext={handleDelegate}
+                    nextLabel="Generate Calendar"
+                />
+
             </main>
 
             {/* Planning Loader (Hidden until triggered) */}

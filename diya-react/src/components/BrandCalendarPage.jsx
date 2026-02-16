@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import CalendarSidebar from './ui/CalendarSidebar';
+import AppHeader from './ui/AppHeader';
+import ActionDock from './ui/ActionDock';
 import { PLATFORMS_DATA } from './ui/PlatformIcons';
 import '../css/calendar.css';
 
@@ -67,6 +69,7 @@ function getMonthDays(year, month) {
 
 export default function BrandCalendarPage() {
     const location = useLocation();
+    const navigate = useNavigate(); // Add hook
     const previousState = location.state || {};
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -96,6 +99,12 @@ export default function BrandCalendarPage() {
             );
         }
     }, [currentDate, viewMode]);
+
+    // Animate AppHeader
+    useEffect(() => {
+        gsap.set('.app-header', { y: -20, opacity: 0 });
+        gsap.to('.app-header', { y: 0, opacity: 1, duration: 0.8, delay: 0.5, ease: "power2.out" });
+    }, []);
 
     // Spotlight animation
     useEffect(() => {
@@ -129,7 +138,7 @@ export default function BrandCalendarPage() {
         });
     };
 
-    const navigate = (direction) => {
+    const handleNavigate = (direction) => {
         const newDate = new Date(currentDate);
         if (viewMode === 'week') {
             newDate.setDate(newDate.getDate() + (direction * 7));
@@ -330,7 +339,9 @@ export default function BrandCalendarPage() {
     };
 
     return (
-        <div className={`calendar-page ${selectedPost ? 'blurred' : ''} ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+        <div className={`calendar-page ${selectedPost ? 'blurred' : ''} ${isSidebarOpen ? 'sidebar-open' : ''}`} style={{ paddingTop: '80px', paddingBottom: '120px' }}>
+            <AppHeader />
+
             {/* Sidebar */}
             <CalendarSidebar
                 isOpen={isSidebarOpen}
@@ -377,8 +388,8 @@ export default function BrandCalendarPage() {
                         </div>
 
                         <div className="calendar-nav">
-                            <button className="calendar-nav-btn" onClick={() => navigate(-1)}>‹</button>
-                            <button className="calendar-nav-btn" onClick={() => navigate(1)}>›</button>
+                            <button className="calendar-nav-btn" onClick={() => handleNavigate(-1)}>‹</button>
+                            <button className="calendar-nav-btn" onClick={() => handleNavigate(1)}>›</button>
                         </div>
 
                         <button className="today-btn" onClick={goToToday}>Today</button>
@@ -390,6 +401,14 @@ export default function BrandCalendarPage() {
                 {viewMode === 'month' && renderMonthView()}
                 {viewMode === 'day' && renderDayView()}
             </div>
+
+            {/* Action Dock */}
+            <ActionDock
+                onBack={() => navigate('/content-direction')}
+                backLabel="Adjust Strategy"
+                onNext={() => console.log("Exporting Calendar...")}
+                nextLabel="Export / Publish"
+            />
 
             {/* Spotlight Overlay */}
             {selectedPost && (

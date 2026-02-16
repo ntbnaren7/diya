@@ -2,7 +2,8 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import '../css/brand-persona.css';
-import SystemNav from './SystemNav';
+import AppHeader from './ui/AppHeader';
+import ActionDock from './ui/ActionDock';
 import PersonaBackground from './PersonaBackground';
 import HeaderAnnotations from './HeaderAnnotations';
 import ModernButton from './ui/ModernButton';
@@ -25,7 +26,7 @@ export default function BrandPersona() {
             // We set starting transform positions here.
             gsap.set('.persona-header h2 .char', { y: 40, skewY: 10 });
             gsap.set('.header-meta', { y: 20 });
-            gsap.set('.system-nav', { y: -20, opacity: 0 });
+            gsap.set('.app-header', { y: -20, opacity: 0 }); // Animate AppHeader
             gsap.set('.glass-card', { y: 60, scale: 0.95 });
             gsap.set('.persona-background', { opacity: 0 });
 
@@ -63,7 +64,7 @@ export default function BrandPersona() {
                 }, "-=0.2")
 
                 // --- 2. Sub-header & Nav Fade In ---
-                .to(['.header-meta', '.system-nav'], {
+                .to(['.header-meta', '.app-header'], {
                     y: 0,
                     opacity: 1,
                     duration: 0.8,
@@ -99,14 +100,10 @@ export default function BrandPersona() {
     };
 
     return (
-        <div className="persona-page" ref={containerRef}>
+        <div className="persona-page" ref={containerRef} style={{ paddingTop: '80px' }}>
             <PersonaBackground />
 
-            <SystemNav
-                step={3}
-                totalSteps={3}
-                onBack={() => navigate('/brand-intake')}
-            />
+            <AppHeader />
 
             <div className="persona-header">
                 <HeaderAnnotations />
@@ -191,19 +188,34 @@ export default function BrandPersona() {
                 </div>
 
                 {/* ACTION DOCK */}
-                <div className="action-dock">
-                    {/* DOWNLOAD PILL (Secondary - Crystal) */}
-                    <button
-                        className="crystal-btn"
-                        onClick={() => console.log('Exporting...')}
+                <div style={{ position: 'relative', zIndex: 100 }}>
+                    <ActionDock
+                        onBack={() => navigate('/brand-builder')}
+                        backLabel="Edit Identity"
                     >
-                        ↓ Download Assets
-                    </button>
-
-                    {/* NEXT STEPS PILL (Minimal Professional) */}
-                    <ModernButton onClick={() => navigate('/content-direction')}>
-                        Looks good. Let DIYA take over.
-                    </ModernButton>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <button
+                                className="crystal-btn"
+                                onClick={() => console.log('Exporting...')}
+                                style={{
+                                    border: '1px solid rgba(0,0,0,0.1)',
+                                    background: 'rgba(255,255,255,0.5)',
+                                    padding: '0 1.5rem',
+                                    height: '50px',
+                                    borderRadius: '999px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 500,
+                                    color: '#555'
+                                }}
+                            >
+                                ↓ Download Assets
+                            </button>
+                            <ModernButton onClick={() => navigate('/content-direction')}>
+                                Proceed to Strategy
+                            </ModernButton>
+                        </div>
+                    </ActionDock>
                 </div>
 
             </div>

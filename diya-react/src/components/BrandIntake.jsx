@@ -110,8 +110,8 @@ export default function BrandIntake() {
 
             <HandwrittenDecor />
 
-            <main className="system-stage" style={{ position: 'relative', zIndex: 10, paddingTop: '80px', paddingBottom: '120px' }}>
-                <h1 className="system-headline" ref={headlineRef} style={{ fontSize: '4.5rem', lineHeight: '0.9', cursor: 'default', letterSpacing: '-0.04em', display: 'flex', flexDirection: 'column', alignItems: 'center', textTransform: 'uppercase', fontWeight: 800, position: 'relative' }}>
+            <main className="system-stage" style={{ position: 'relative', zIndex: 10, paddingTop: '120px', paddingBottom: '120px' }}>
+                <h1 className="system-headline" ref={headlineRef} style={{ fontSize: '6.5rem', lineHeight: '0.85', cursor: 'default', letterSpacing: '-0.04em', display: 'flex', flexDirection: 'column', alignItems: 'center', textTransform: 'uppercase', fontWeight: 800, position: 'relative' }}>
                     <TextDecorations />
                     <span style={{ color: '#111', display: 'block' }}>
                         Import Your

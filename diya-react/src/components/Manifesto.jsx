@@ -323,7 +323,8 @@ export default function Manifesto() {
                 {acronymData.map((item, i) => (
                     <div key={i} ref={el => wordsRef.current[i] = el} style={{
                         position: 'absolute', fontFamily: 'var(--font-heading)', fontSize: '12vw', fontWeight: '800',
-                        color: 'transparent', WebkitTextStroke: '1.5px black', opacity: 0, textAlign: 'center', whiteSpace: 'nowrap', zIndex: 10
+                        color: 'transparent', WebkitTextStroke: '1.5px black', opacity: 0, textAlign: 'center', whiteSpace: 'nowrap', zIndex: 10,
+                        transform: 'translateY(-5vh)'
                     }}>
                         {item.letters.map((char, j) => (
                             <span key={j} className="word-letter" style={{ display: 'inline-block' }}>{char}</span>
@@ -335,7 +336,8 @@ export default function Manifesto() {
                 <div ref={whyDiyaContainerRef} className="why-diya-reveal" style={{
                     position: 'absolute', width: '100%', height: '100%', top: 0, left: 0,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2vw',
-                    opacity: 0, visibility: 'hidden', zIndex: 15, perspective: '1000px'
+                    opacity: 0, visibility: 'hidden', zIndex: 15, perspective: '1000px',
+                    transform: 'translateY(-5vh)'
                 }}>
                     <div ref={el => shapeRefs.current[0] = el} style={{ position: 'absolute', top: '30%', left: '15%', width: '5vw' }}>
                         <Icons.GsapFlower />

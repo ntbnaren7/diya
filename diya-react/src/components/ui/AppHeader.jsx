@@ -25,16 +25,20 @@ export default function AppHeader() {
         }
     };
 
-    return (
-        <header className="app-header">
-            {/* Logo Area */}
-            <div className="app-header-logo" onClick={() => navigate('/')}>
-                <img src="/assets/mascot.png" alt="Diya Logo" />
-                <span>DIYA</span>
-            </div>
+    const isCalendarPage = location.pathname === '/brand-calendar';
 
-            {/* Breadcrumbs */}
-            <nav className="app-phase-tracker">
+    return (
+        <header className={`app-header ${isCalendarPage ? 'minimal' : ''}`}>
+            {/* Logo Area - Hidden on Calendar Page */}
+            {!isCalendarPage && (
+                <div className="app-header-logo" onClick={() => navigate('/')}>
+                    <img src="/assets/mascot.png" alt="Diya Logo" />
+                    <span>DIYA</span>
+                </div>
+            )}
+
+            {/* Breadcrumbs - Always Visible and Centered */}
+            <nav className="app-phase-tracker" style={isCalendarPage ? { margin: '0 auto' } : {}}>
                 {PHASES.map((phase, i) => {
                     const isCompleted = i < currentPhaseIndex;
                     const isActive = i === currentPhaseIndex;
@@ -58,10 +62,12 @@ export default function AppHeader() {
                 })}
             </nav>
 
-            {/* User Profile (Placeholder) */}
-            <div className="app-user-profile" title="Account">
-                <span>VN</span>
-            </div>
+            {/* User Profile - Hidden on Calendar Page */}
+            {!isCalendarPage && (
+                <div className="app-user-profile" title="Account">
+                    <span>VN</span>
+                </div>
+            )}
         </header>
     );
 }

@@ -45,7 +45,6 @@ export default function BrandStatement() {
                 y: 50,
                 rotateX: 90,
                 opacity: 0,
-                opacity: 0,
                 duration: 1,
                 stagger: 0.02,
                 ease: "back.out(1.5)", // Snappy settling

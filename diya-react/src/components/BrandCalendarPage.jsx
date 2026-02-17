@@ -65,11 +65,39 @@ export default function BrandCalendarPage() {
     const gridRef = useRef(null);
     const spotlightRef = useRef(null);
     const spotlightContentRef = useRef(null);
+    const autoPeekTimerRef = useRef(null);
+    const userToggledRef = useRef(false);
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedPost, setSelectedPost] = useState(null);
     const [viewMode, setViewMode] = useState('week');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // --- Sidebar Auto-Peek on Page Entry ---
+    useEffect(() => {
+        // Open sidebar after entrance animations settle
+        autoPeekTimerRef.current = setTimeout(() => {
+            if (userToggledRef.current) return; // User already interacted
+            setIsSidebarOpen(true);
+
+            // Close after dwell period
+            autoPeekTimerRef.current = setTimeout(() => {
+                if (userToggledRef.current) return; // User clicked during dwell
+                setIsSidebarOpen(false);
+            }, 2000);
+        }, 1500);
+
+        return () => {
+            if (autoPeekTimerRef.current) clearTimeout(autoPeekTimerRef.current);
+        };
+    }, []); // Only on mount
+
+    // Manual toggle handler — cancels auto-peek
+    const handleManualToggle = useCallback(() => {
+        userToggledRef.current = true;
+        if (autoPeekTimerRef.current) clearTimeout(autoPeekTimerRef.current);
+        setIsSidebarOpen(prev => !prev);
+    }, []);
 
     const weekDates = getWeekDates(currentDate);
     const today = new Date();
@@ -291,17 +319,16 @@ export default function BrandCalendarPage() {
             <AppHeader />
             <CalendarSidebar
                 isOpen={isSidebarOpen}
-                onClose={() => setIsSidebarOpen(false)}
+                onClose={handleManualToggle}
                 currentDate={currentDate}
                 onDateSelect={(date) => setCurrentDate(date)}
             />
 
             <div className="calendar-content">
                 <header className="calendar-header">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button className={`burger-menu-btn ${isSidebarOpen ? 'active' : ''}`} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                            <span className="burger-line"></span><span className="burger-line"></span><span className="burger-line"></span>
-                        </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                        <MenuToggle isOpen={isSidebarOpen} toggle={handleManualToggle} />
+                        {/* <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} style={{ padding: '10px' }}>Toggle</button> */}
                         <h1 className="calendar-title">{monthName}</h1>
                     </div>
                     <div className="calendar-controls">
@@ -360,5 +387,76 @@ export default function BrandCalendarPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+// Inline MenuToggle to avoid import crashes
+function MenuToggle({ isOpen, toggle }) {
+    const buttonRef = useRef(null);
+
+    // Magnetic Effect (Lightweight JS)
+    useEffect(() => {
+        const button = buttonRef.current;
+        if (!button) return;
+
+        const handleMouseMove = (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            button.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        };
+
+        const handleMouseLeave = () => {
+            button.style.transform = `translate(0px, 0px)`;
+        };
+
+        button.addEventListener('mousemove', handleMouseMove);
+        button.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            button.removeEventListener('mousemove', handleMouseMove);
+            button.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
+
+    const lineStyle = {
+        width: '20px',
+        height: '2px',
+        background: '#1a1a1a',
+        borderRadius: '2px',
+        transformOrigin: 'center',
+        display: 'block',
+        pointerEvents: 'none'
+    };
+
+    return (
+        <button
+            ref={buttonRef}
+            onClick={toggle}
+            className={`menu-toggle-btn ${isOpen ? 'open' : ''}`}
+            aria-label="Toggle Menu"
+            style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '5px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                zIndex: 2001,
+                padding: 0,
+                transition: 'transform 0.2s cubic-bezier(0.33, 1, 0.68, 1)',
+            }}
+        >
+            <div className={`line top ${isOpen ? 'open' : ''}`} style={lineStyle} />
+            <div className={`line middle ${isOpen ? 'open' : ''}`} style={lineStyle} />
+            <div className={`line bottom ${isOpen ? 'open' : ''}`} style={lineStyle} />
+        </button>
     );
 }

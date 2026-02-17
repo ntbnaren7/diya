@@ -77,12 +77,21 @@
 .phase-item.completed {
     color: #111;
     cursor: pointer;
+    position: relative;
 }
 
 .phase-item.completed:hover {
     color: #00c237;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+}
+
+.phase-item.completed:hover::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background-color: currentColor;
 }
 
 .phase-item.active {

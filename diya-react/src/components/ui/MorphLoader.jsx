@@ -40,7 +40,7 @@ export default function MorphLoader() {
         // Completion Timer
         const completeTimeout = setTimeout(() => {
             clearInterval(textInterval);
-            navigate('/brand-calendar', { state: previousState });
+            navigate('/gallery-preview', { state: previousState });
         }, TOTAL_DURATION);
 
         return () => {

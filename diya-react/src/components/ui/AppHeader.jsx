@@ -5,7 +5,7 @@ import '../../css/navigation.css';
 const PHASES = [
     { id: 'identity', label: 'Identity', paths: ['/brand-intake', '/brand-builder'] },
     { id: 'persona', label: 'Persona', paths: ['/brand-persona'] },
-    { id: 'strategy', label: 'Strategy', paths: ['/content-direction', '/generating-plan', '/gallery-preview'] },
+    { id: 'strategy', label: 'Strategy', paths: ['/content-direction', '/generating-plan', '/gallery-preview', '/connect-socials'] },
     { id: 'calendar', label: 'Calendar', paths: ['/brand-calendar'] }
 ];
 

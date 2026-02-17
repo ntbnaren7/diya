@@ -249,7 +249,7 @@ export default function GalleryPreviewPage() {
 
             {/* CTAs */}
             <div className="gallery-cta-bar" ref={ctaRef}>
-                <button className="gallery-cta-btn secondary">
+                <button className="gallery-cta-btn secondary" onClick={() => navigate('/connect-socials', { state: previousState })}>
                     🔗 Connect Social Accounts
                 </button>
                 <button className="gallery-cta-btn primary" onClick={handleProceedToCalendar}>

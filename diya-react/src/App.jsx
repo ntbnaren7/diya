@@ -9,6 +9,7 @@ import MorphLoader from './components/ui/MorphLoader';
 import BrandCalendarPage from './components/BrandCalendarPage';
 import BrandBuilder from './components/BrandBuilder';
 import GalleryPreviewPage from './components/GalleryPreviewPage';
+import ConnectSocialsPage from './components/ConnectSocialsPage';
 import './index.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/content-direction" element={<ContentDirection />} />
         <Route path="/generating-plan" element={<MorphLoader />} />
         <Route path="/gallery-preview" element={<GalleryPreviewPage />} />
+        <Route path="/connect-socials" element={<ConnectSocialsPage />} />
         <Route path="/brand-builder" element={<BrandBuilder />} />
         <Route path="/brand-calendar" element={<BrandCalendarPage />} />
       </Routes>

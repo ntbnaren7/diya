@@ -314,37 +314,67 @@ export default function ConnectSocialsPage() {
                 setOauthProgress(100);
                 setTimeout(() => {
                     setOauthPhase('success');
-                    // Success "Pop" animation
-                    const successTl = gsap.timeline();
 
-                    // 1. Initial State
-                    successTl.set('.oauth-success-logo', {
-                        backgroundColor: oauthTarget.color,
-                        scale: 0.8,
-                        opacity: 0
-                    });
+                    // Enhanced Success Timeline (Round 14)
+                    requestAnimationFrame(() => {
+                        const successTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-                    // 2. Pop In & Morph Color
-                    successTl.to('.oauth-success-logo', {
-                        scale: 1,
-                        opacity: 1,
-                        duration: 0.5,
-                        ease: 'elastic.out(1, 0.5)'
-                    })
-                        .to('.oauth-success-logo', {
-                            backgroundColor: '#22c55e', // DIYA Green
+                        // Step 1: Fade out header area
+                        successTl.to('.oauth-header', {
+                            opacity: 0, y: -10, duration: 0.3, ease: 'power2.in'
+                        });
+
+                        // Step 2: Compress the modal card
+                        successTl.to('.oauth-modal', {
+                            maxWidth: 340,
+                            padding: '2.5rem 2rem',
                             duration: 0.6,
-                            ease: 'power2.out'
-                        }, '-=0.3')
+                            ease: 'power2.inOut'
+                        }, '-=0.15');
 
-                        // 3. Pulse Ring Effect
-                        .to('.oauth-success-logo', {
-                            boxShadow: '0 0 0 12px rgba(34, 197, 94, 0.2)',
-                            duration: 0.4,
-                            yoyo: true,
-                            repeat: 1,
-                            ease: 'sine.inOut'
-                        }, '-=0.4');
+                        // Step 3: Set initial states for success elements
+                        successTl.set('.oauth-success-logo', {
+                            backgroundColor: oauthTarget.color,
+                            scale: 0, opacity: 0
+                        });
+                        successTl.set('.oauth-success-title', { opacity: 0, y: 15 });
+                        successTl.set('.oauth-desc', { opacity: 0, y: 10 });
+                        successTl.set('.oauth-primary-btn.success', { opacity: 0, y: 10, scale: 0.95 });
+
+                        // Step 4: Pop in the logo in brand color
+                        successTl.to('.oauth-success-logo', {
+                            scale: 1, opacity: 1,
+                            duration: 0.5, ease: 'back.out(1.7)'
+                        });
+
+                        // Step 5: Morph brand color -> DIYA Green
+                        successTl.to('.oauth-success-logo', {
+                            backgroundColor: '#22c55e',
+                            duration: 0.8, ease: 'power2.inOut'
+                        }, '-=0.2');
+
+                        // Step 6: Pulse ring celebration
+                        successTl.to('.oauth-success-logo', {
+                            boxShadow: '0 0 0 14px rgba(34, 197, 94, 0.18)',
+                            duration: 0.5, yoyo: true, repeat: 1, ease: 'sine.inOut'
+                        }, '-=0.5');
+
+                        // Step 7: Slide in title
+                        successTl.to('.oauth-success-title', {
+                            opacity: 1, y: 0, duration: 0.4
+                        }, '-=0.6');
+
+                        // Step 8: Slide in description
+                        successTl.to('.oauth-desc', {
+                            opacity: 1, y: 0, duration: 0.35
+                        }, '-=0.3');
+
+                        // Step 9: Pop in Done button
+                        successTl.to('.oauth-primary-btn.success', {
+                            opacity: 1, y: 0, scale: 1,
+                            duration: 0.35, ease: 'back.out(1.4)'
+                        }, '-=0.2');
+                    });
 
                 }, 500);
                 return;
@@ -389,6 +419,8 @@ export default function ConnectSocialsPage() {
     const closeOAuth = () => {
         if (oauthOverlayRef.current && oauthModalRef.current) {
             gsap.to(oauthModalRef.current, { scale: 0.95, opacity: 0, y: 10, duration: 0.2, ease: 'power2.in' });
+            // Reset compressed dimensions
+            gsap.set(oauthModalRef.current, { maxWidth: '', padding: '', delay: 0.25 });
             gsap.to(oauthOverlayRef.current, {
                 opacity: 0,
                 backdropFilter: 'blur(0px)',
@@ -548,8 +580,8 @@ export default function ConnectSocialsPage() {
             {oauthTarget && (
                 <div className="oauth-overlay" ref={oauthOverlayRef} onClick={closeOAuth}>
                     <div className="oauth-modal" ref={oauthModalRef} onClick={(e) => e.stopPropagation()}>
-                        {/* Header Area */}
-                        <div className="oauth-header">
+                        {/* Header Area — hidden during success via GSAP */}
+                        <div className="oauth-header" style={oauthPhase === 'success' ? { position: 'absolute', pointerEvents: 'none' } : {}}>
                             <div className="oauth-platform-icon-lg" style={{ background: oauthTarget.color, color: '#fff' }}>
                                 <oauthTarget.icon size={32} />
                             </div>
@@ -605,11 +637,11 @@ export default function ConnectSocialsPage() {
                         {oauthPhase === 'success' && (
                             <div className="oauth-success-container">
                                 <div className="oauth-success-logo">
-                                    <oauthTarget.icon size={40} className="success-icon-svg" />
+                                    <oauthTarget.icon size={36} />
                                 </div>
-                                <h3 className="oauth-success-title">Connection Successful</h3>
+                                <h3 className="oauth-success-title">{oauthTarget.name} Connected!</h3>
                                 <p className="oauth-desc">
-                                    Your <strong>{oauthTarget.name}</strong> account has been successfully linked to DIYA.
+                                    Your account has been successfully linked to DIYA.
                                 </p>
                                 <button className="oauth-primary-btn success" onClick={completeOAuth}>
                                     Done

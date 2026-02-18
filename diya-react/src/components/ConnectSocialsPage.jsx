@@ -51,8 +51,7 @@ const OAUTH_STEPS = [
     'Almost there...',
 ];
 
-// --- Scramble Text Characters (for text scramble effect) ---
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+
 
 // --- Floating Shapes Component ---
 function FloatingShapes() {
@@ -140,26 +139,7 @@ function HandwrittenDecor() {
                 one click away →
             </div>
 
-            {/* Scribble arrow near CTA */}
-            <svg className="cs-hw-arrow cta-arrow" width="120" height="80" viewBox="0 0 120 80" style={{ overflow: 'visible' }}>
-                <path
-                    className="cs-hw-path"
-                    d="M 100,5 C 60,10 30,35 15,60"
-                    fill="none"
-                    stroke="rgba(0,0,0,0.12)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                />
-                <path
-                    className="cs-hw-path"
-                    d="M 20,50 L 15,60 L 28,58"
-                    fill="none"
-                    stroke="rgba(0,0,0,0.12)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
-            </svg>
+
 
             {/* Sizzle star near header */}
             <svg style={{ position: 'absolute', top: '12%', right: '14%', overflow: 'visible' }} width="30" height="30" viewBox="0 0 30 30">
@@ -238,7 +218,7 @@ export default function ConnectSocialsPage() {
         const ctx = gsap.context(() => {
             // Pre-set states
             gsap.set('.connect-title .title-word', { y: 40, opacity: 0, filter: 'blur(12px)' });
-            gsap.set('.connect-subtitle', { opacity: 0 });
+            gsap.set('.connect-subtitle', { opacity: 0, y: 10, filter: 'blur(4px)' });
             gsap.set('.connect-counter', { scale: 0.8, opacity: 0 });
             gsap.set('.platform-card', { y: 50, opacity: 0, scale: 0.92 });
             gsap.set('.security-block', { opacity: 0, y: 15 });
@@ -256,29 +236,14 @@ export default function ConnectSocialsPage() {
                 stagger: 0.12,
                 ease: 'power3.out',
             })
-                // 2. Subtitle scramble reveal (Slower & Deliberate)
-                .call(() => {
-                    if (subtitleRef.current) {
-                        const finalText = 'DIYA will publish and schedule content directly to these platforms.';
-                        const el = subtitleRef.current;
-                        el.style.opacity = '1';
-                        let iteration = 0;
-                        // Instant interval: 20ms
-                        const interval = setInterval(() => {
-                            el.textContent = finalText.split('').map((char, i) => {
-                                if (i < iteration) return finalText[i];
-                                if (char === ' ') return ' ';
-                                return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-                            }).join('');
-                            // Instant increment: 2.0 for very fast reveal
-                            iteration += 2.0;
-                            if (iteration > finalText.length) {
-                                el.textContent = finalText;
-                                clearInterval(interval);
-                            }
-                        }, 20);
-                    }
-                }, null, '-=0.4')
+                // 2. Subtitle fade-in (Elegant & Simple)
+                .to('.connect-subtitle', {
+                    opacity: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 1.2,
+                    ease: 'power2.out',
+                }, '-=0.6')
                 // 3. Counter pill pops in
                 .to('.connect-counter', {
                     scale: 1,
@@ -501,7 +466,7 @@ export default function ConnectSocialsPage() {
                             )}
                             {status === 'connected' && (
                                 <button className="platform-action-btn disconnect" onClick={() => handleDisconnect(platform.id)}>
-                                    Disconnect
+                                    Connected
                                 </button>
                             )}
                             {status === 'warning' && (

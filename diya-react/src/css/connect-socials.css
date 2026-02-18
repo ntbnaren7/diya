@@ -14,8 +14,8 @@
     overflow-x: hidden;
     overflow-y: auto;
     /* Fix clipping - allow scroll if needed */
-    padding-bottom: 10rem;
-    /* Increased bottom padding to prevent cut-off */
+    padding-bottom: 5rem;
+    /* Reduced bottom padding */
 }
 
 /* --- Floating Abstract Shapes Layer (Refined) --- */
@@ -161,6 +161,8 @@
     /* Increased slightly for better breathability */
     padding: 3rem 2rem !important;
     /* Balanced padding top/bottom */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle Glass Border */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,7 +176,7 @@
     /* Reduced safely to 7rem */
     row-gap: 7rem;
     max-width: 900px;
-    margin: 6rem auto 0;
+    margin: 3rem auto 0;
     padding: 0 2rem;
     position: relative;
     z-index: 10;
@@ -200,30 +202,36 @@
 }
 
 /* Connect (Primary) */
+/* Connect (Primary) - Bold Outline */
 .platform-action-btn.connect {
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    color: #333;
+    background: transparent;
+    border: 1px solid #1a1a1a;
+    color: #1a1a1a;
 }
 
 .platform-action-btn.connect:hover {
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: transparent;
+    border-color: #00c237;
+    color: #00c237;
     transform: translateY(-2px);
-    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 194, 55, 0.15);
 }
 
 /* Disconnect (Destructive/Ghost) */
+/* Connected State (Green Success) */
 .platform-action-btn.disconnect {
-    background: transparent;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    background: #00c237;
+    border: 1px solid #00c237;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 194, 55, 0.25);
 }
 
 .platform-action-btn.disconnect:hover {
-    background: #fef2f2;
+    background: #ef4444;
     border-color: #ef4444;
-    transform: translateY(-2px);
+    /* content: "Disconnect"; Removed invalid property */
+    /* Hint at destructive action */
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
 }
 
 /* Reconnect (Warning) */
@@ -339,6 +347,54 @@
     align-items: center;
     position: relative;
     z-index: 10;
+}
+
+/* Base Footer Button */
+.connect-footer-btn {
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    letter-spacing: -0.01em;
+}
+
+/* Secondary (Back) - Glassmorphism */
+.connect-footer-btn.secondary {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #555;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.connect-footer-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(-4px);
+    color: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Primary (Continue) - Vibrant Gradient */
+.connect-footer-btn.primary {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15), 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+
+.connect-footer-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25), 0 2px 4px rgba(15, 23, 42, 0.2);
+    /* Lighter gradient on hover */
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
 }
 
 .security-block {

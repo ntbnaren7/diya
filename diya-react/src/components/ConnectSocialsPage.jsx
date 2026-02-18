@@ -134,9 +134,9 @@ function HandwrittenDecor() {
                 secure & simple ✦
             </div>
 
-            {/* "one click away" text */}
+            {/* "Reach everyone" text (Round 12) */}
             <div className="cs-hw-text easy" style={{ transform: 'translateY(8px) rotate(4deg)' }}>
-                one click away →
+                Reach everyone &rarr;
             </div>
 
 
@@ -220,7 +220,8 @@ export default function ConnectSocialsPage() {
             gsap.set('.connect-subtitle', { opacity: 0, y: 10, filter: 'blur(4px)' });
             gsap.set('.connect-counter', { scale: 0.8, opacity: 0 });
             gsap.set('.platform-card', { y: 50, opacity: 0, scale: 0.92 });
-            gsap.set('.security-block', { opacity: 0, y: 15 });
+            gsap.set('.security-pill-container', { opacity: 0, y: 20 });
+            gsap.set('.notice-banner-container', { opacity: 0, y: 20 });
             gsap.set('.publishing-section', { opacity: 0, y: 15 });
             gsap.set('.connect-footer', { y: 20, opacity: 0 });
 
@@ -260,7 +261,8 @@ export default function ConnectSocialsPage() {
                     ease: 'back.out(1.2)',
                 }, '-=0.3')
                 // 5. Remaining sections
-                .to('.security-block', { opacity: 1, y: 0, duration: 0.4 }, '-=0.2')
+                .to('.security-pill-container', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+                .to('.notice-banner-container', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
                 .to('.publishing-section', { opacity: 1, y: 0, duration: 0.4 }, '-=0.2')
                 .to('.connect-footer', { y: 0, opacity: 1, duration: 0.5 }, '-=0.2');
 
@@ -394,7 +396,7 @@ export default function ConnectSocialsPage() {
                 opacity: 0, y: -20, scale: 0.95, duration: 0.3,
                 stagger: 0.04, ease: 'power2.in'
             })
-                .to(['.connect-header', '.connect-footer', '.security-block', '.publishing-section'],
+                .to(['.connect-header', '.connect-footer', '.security-pill-container', '.notice-banner-container'],
                     { opacity: 0, y: -15, duration: 0.3, ease: 'power2.in' }, '-=0.15')
                 .to('.cs-shapes-layer', { opacity: 0, duration: 0.3 }, '-=0.2')
                 .to('.cs-handwritten-layer', { opacity: 0, duration: 0.2 }, '-=0.3');
@@ -487,22 +489,23 @@ export default function ConnectSocialsPage() {
                 })}
             </div>
 
-            {/* Security Reassurance */}
-            <div className="security-block">
-                <div className="security-inner">
-                    <span className="security-icon">🔒</span>
-                    <span className="security-text">
-                        DIYA uses secure authentication. We never store your passwords.
-                    </span>
+            {/* Premium Security Pill (Round 12) */}
+            <div className="security-pill-container">
+                <div className="security-pill">
+                    <span className="security-lock-icon">🔒</span>
+                    <span>DIYA uses secure authentication. We never store your passwords.</span>
                 </div>
             </div>
 
-            {/* Notice */}
-            {connectedCount === 0 && (
-                <p className="connect-notice">
-                    You'll need to connect at least one account before publishing.
-                </p>
-            )}
+            {/* Premium Notice Banner (Round 12) */}
+            <div className="notice-banner-container">
+                <div className="notice-banner">
+                    <span className="notice-icon">⚠️</span>
+                    <span>You'll need to connect at least one account before publishing.</span>
+                </div>
+            </div>
+
+            {/* Floating Decor (Moved to separate component) */}
 
             {/* Footer */}
             <div className="connect-footer">
@@ -518,7 +521,6 @@ export default function ConnectSocialsPage() {
             {oauthTarget && (
                 <div className="oauth-overlay" ref={oauthOverlayRef} onClick={closeOAuth}>
                     <div className="oauth-modal" ref={oauthModalRef} onClick={(e) => e.stopPropagation()}>
-
                         {/* Header Area */}
                         <div className="oauth-header">
                             <div className="oauth-platform-icon-lg" style={{ background: oauthTarget.color }}>
@@ -585,7 +587,6 @@ export default function ConnectSocialsPage() {
                                 </button>
                             </div>
                         )}
-
                     </div>
                 </div>
             )}

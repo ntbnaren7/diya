@@ -16,6 +16,34 @@
     /* Fix clipping - allow scroll if needed */
     padding-bottom: 5rem;
     /* Reduced bottom padding */
+    position: relative;
+    overflow: hidden;
+    /* Ensure pseud-elements don't overflow */
+}
+
+/* Animated Grid Background */
+.connect-socials-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+    animation: gridScroll 120s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes gridScroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(50px);
+    }
 }
 
 /* --- Floating Abstract Shapes Layer (Refined) --- */
@@ -80,10 +108,12 @@
 }
 
 .cs-hw-text.easy {
-    top: 25%;
-    right: 12%;
-    font-size: 1.25rem;
+    top: 15%;
+    right: 5%;
+    font-size: 1.4rem;
     transform: rotate(4deg);
+    color: rgba(0, 0, 0, 0.4);
+    /* Slightly darker for readability */
 }
 
 /* --- Header Section --- */
@@ -172,9 +202,10 @@
 .platform-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 7rem 2rem;
-    /* Reduced safely to 7rem */
-    row-gap: 7rem;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 4rem 2rem;
+    /* Compacted from 7rem to 4rem */
+    row-gap: 4rem;
     max-width: 900px;
     margin: 3rem auto 0;
     padding: 0 2rem;
@@ -397,12 +428,91 @@
     background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
 }
 
-.security-block {
-    text-align: center;
-    display: block;
+/* --- Premium Messaging Components (Round 12) --- */
+
+.security-pill-container {
     width: 100%;
-    margin-top: 4rem;
-    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.security-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 194, 55, 0.15);
+    border-radius: 100px;
+    box-shadow: 0 4px 12px rgba(0, 194, 55, 0.05);
+    font-size: 0.9rem;
+    color: #475569;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.security-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 194, 55, 0.1);
+    border-color: rgba(0, 194, 55, 0.3);
+}
+
+.security-lock-icon {
+    font-size: 1rem;
+    color: #00c237;
+    /* Success Green */
+    animation: lockPulse 3s infinite ease-in-out;
+}
+
+@keyframes lockPulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.notice-banner-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 1.5rem auto 3rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+.notice-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, #fffbeb 0%, #fff 100%);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    /* Amber border */
+    border-radius: 16px;
+    font-size: 0.95rem;
+    color: #92400e;
+    /* Amber-800 */
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+}
+
+.notice-icon {
+    font-size: 1.1rem;
+    color: #f59e0b;
+    /* Amber-500 */
 }
 
 /* Safety Override for Logo Margin */

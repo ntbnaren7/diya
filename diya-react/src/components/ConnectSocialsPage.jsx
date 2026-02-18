@@ -315,10 +315,37 @@ export default function ConnectSocialsPage() {
                 setTimeout(() => {
                     setOauthPhase('success');
                     // Success "Pop" animation
-                    gsap.fromTo('.oauth-success-icon',
-                        { scale: 0, rotate: -45 },
-                        { scale: 1, rotate: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' }
-                    );
+                    const successTl = gsap.timeline();
+
+                    // 1. Initial State
+                    successTl.set('.oauth-success-logo', {
+                        backgroundColor: oauthTarget.color,
+                        scale: 0.8,
+                        opacity: 0
+                    });
+
+                    // 2. Pop In & Morph Color
+                    successTl.to('.oauth-success-logo', {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'elastic.out(1, 0.5)'
+                    })
+                        .to('.oauth-success-logo', {
+                            backgroundColor: '#22c55e', // DIYA Green
+                            duration: 0.6,
+                            ease: 'power2.out'
+                        }, '-=0.3')
+
+                        // 3. Pulse Ring Effect
+                        .to('.oauth-success-logo', {
+                            boxShadow: '0 0 0 12px rgba(34, 197, 94, 0.2)',
+                            duration: 0.4,
+                            yoyo: true,
+                            repeat: 1,
+                            ease: 'sine.inOut'
+                        }, '-=0.4');
+
                 }, 500);
                 return;
             }
@@ -523,13 +550,12 @@ export default function ConnectSocialsPage() {
                     <div className="oauth-modal" ref={oauthModalRef} onClick={(e) => e.stopPropagation()}>
                         {/* Header Area */}
                         <div className="oauth-header">
-                            <div className="oauth-platform-icon-lg" style={{ background: oauthTarget.color }}>
-                                <oauthTarget.icon size={32} color="#fff" />
+                            <div className="oauth-platform-icon-lg" style={{ background: oauthTarget.color, color: '#fff' }}>
+                                <oauthTarget.icon size={32} />
                             </div>
                             <h3 className="oauth-title">
                                 {oauthPhase === 'login' && `Sign in to ${oauthTarget.name}`}
                                 {oauthPhase === 'progress' && `Connecting via ${oauthTarget.name}...`}
-                                {oauthPhase === 'success' && 'Connection Successful'}
                             </h3>
                         </div>
 
@@ -578,7 +604,10 @@ export default function ConnectSocialsPage() {
                         {/* Success Phase */}
                         {oauthPhase === 'success' && (
                             <div className="oauth-success-container">
-                                <div className="oauth-success-icon">✓</div>
+                                <div className="oauth-success-logo">
+                                    <oauthTarget.icon size={40} className="success-icon-svg" />
+                                </div>
+                                <h3 className="oauth-success-title">Connection Successful</h3>
                                 <p className="oauth-desc">
                                     Your <strong>{oauthTarget.name}</strong> account has been successfully linked to DIYA.
                                 </p>

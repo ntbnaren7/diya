@@ -172,7 +172,6 @@ export default function ConnectSocialsPage() {
 
     // OAuth Modal
     const [oauthTarget, setOauthTarget] = useState(null);
-    const [oauthPhase, setOauthPhase] = useState('idle');
     const [oauthProgress, setOauthProgress] = useState(0);
     const [oauthStep, setOauthStep] = useState('');
     const oauthOverlayRef = useRef(null);
@@ -270,46 +269,55 @@ export default function ConnectSocialsPage() {
     }, []);
 
     // --- OAuth Simulation ---
+    // Phases: 'idle' | 'login' | 'progress' | 'success'
+    const [oauthPhase, setOauthPhase] = useState('idle');
+    const [oauthCredentials, setOauthCredentials] = useState({ username: '', password: '' });
+
+    // Start -> Shows Login Modal
     const startOAuth = (platform) => {
         setOauthTarget(platform);
+        setOauthPhase('login');
+        setOauthCredentials({ username: '', password: '' });
+
+        // Animate overlay in
+        setTimeout(() => {
+            if (oauthOverlayRef.current && oauthModalRef.current) {
+                gsap.fromTo(oauthOverlayRef.current,
+                    { opacity: 0, backdropFilter: 'blur(0px)' },
+                    { opacity: 1, backdropFilter: 'blur(8px)', duration: 0.4, ease: 'power2.out' }
+                );
+                gsap.fromTo(oauthModalRef.current,
+                    { scale: 0.9, opacity: 0, y: 20 },
+                    { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.2)' }
+                );
+            }
+        }, 10);
+    };
+
+    // Login -> Starts Progress
+    const handleLoginSubmit = (e) => {
+        e.preventDefault();
         setOauthPhase('progress');
         setOauthProgress(0);
         setOauthStep(OAUTH_STEPS[0]);
-
-        // Animate overlay in with blur ramp
-        setTimeout(() => {
-            if (oauthOverlayRef.current && oauthModalRef.current) {
-                gsap.to(oauthOverlayRef.current, {
-                    opacity: 1,
-                    duration: 0.35,
-                    ease: 'power2.out',
-                });
-                // Animate backdrop blur
-                gsap.fromTo(oauthOverlayRef.current,
-                    { backdropFilter: 'blur(0px)', webkitBackdropFilter: 'blur(0px)' },
-                    { backdropFilter: 'blur(12px)', webkitBackdropFilter: 'blur(12px)', duration: 0.5, ease: 'power2.out' }
-                );
-                gsap.to(oauthModalRef.current, {
-                    scale: 1,
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: 'back.out(1.7)',
-                });
-            }
-        }, 50);
 
         // Simulate progress
         let progress = 0;
         let stepIndex = 0;
         const interval = setInterval(() => {
-            progress += Math.random() * 15 + 5;
+            progress += Math.random() * 12 + 8; // Slightly faster chunks
             if (progress >= 100) {
                 progress = 100;
                 clearInterval(interval);
                 setOauthProgress(100);
-                setOauthStep('Connection established!');
-                setTimeout(() => setOauthPhase('success'), 400);
+                setTimeout(() => {
+                    setOauthPhase('success');
+                    // Success "Pop" animation
+                    gsap.fromTo('.oauth-success-icon',
+                        { scale: 0, rotate: -45 },
+                        { scale: 1, rotate: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' }
+                    );
+                }, 500);
                 return;
             }
             const newStepIndex = Math.min(Math.floor((progress / 100) * OAUTH_STEPS.length), OAUTH_STEPS.length - 1);
@@ -318,9 +326,10 @@ export default function ConnectSocialsPage() {
                 setOauthStep(OAUTH_STEPS[stepIndex]);
             }
             setOauthProgress(progress);
-        }, 350);
+        }, 400);
     };
 
+    // Success -> Done
     const completeOAuth = () => {
         if (oauthTarget) {
             setConnections(prev => ({ ...prev, [oauthTarget.id]: 'connected' }));
@@ -350,11 +359,10 @@ export default function ConnectSocialsPage() {
 
     const closeOAuth = () => {
         if (oauthOverlayRef.current && oauthModalRef.current) {
-            gsap.to(oauthModalRef.current, { scale: 0.9, opacity: 0, y: 10, duration: 0.25, ease: 'power2.in' });
+            gsap.to(oauthModalRef.current, { scale: 0.95, opacity: 0, y: 10, duration: 0.2, ease: 'power2.in' });
             gsap.to(oauthOverlayRef.current, {
                 opacity: 0,
                 backdropFilter: 'blur(0px)',
-                webkitBackdropFilter: 'blur(0px)',
                 duration: 0.3,
                 onComplete: () => {
                     setOauthTarget(null);
@@ -489,8 +497,6 @@ export default function ConnectSocialsPage() {
                 </div>
             </div>
 
-
-
             {/* Notice */}
             {connectedCount === 0 && (
                 <p className="connect-notice">
@@ -508,35 +514,78 @@ export default function ConnectSocialsPage() {
                 </button>
             </div>
 
-            {/* OAuth Simulation Modal */}
+            {/* Premium OAuth Modal (Centered Spotlight) */}
             {oauthTarget && (
-                <div className="oauth-overlay" ref={oauthOverlayRef} onClick={oauthPhase === 'success' ? completeOAuth : undefined}>
+                <div className="oauth-overlay" ref={oauthOverlayRef} onClick={closeOAuth}>
                     <div className="oauth-modal" ref={oauthModalRef} onClick={(e) => e.stopPropagation()}>
-                        {oauthPhase === 'progress' && (
-                            <>
-                                <div className="oauth-platform-icon" style={{ background: oauthTarget.color }}>
-                                    <oauthTarget.icon size={28} />
+
+                        {/* Header Area */}
+                        <div className="oauth-header">
+                            <div className="oauth-platform-icon-lg" style={{ background: oauthTarget.color }}>
+                                <oauthTarget.icon size={32} color="#fff" />
+                            </div>
+                            <h3 className="oauth-title">
+                                {oauthPhase === 'login' && `Sign in to ${oauthTarget.name}`}
+                                {oauthPhase === 'progress' && `Connecting via ${oauthTarget.name}...`}
+                                {oauthPhase === 'success' && 'Connection Successful'}
+                            </h3>
+                        </div>
+
+                        {/* Login Phase */}
+                        {oauthPhase === 'login' && (
+                            <form className="oauth-form" onSubmit={handleLoginSubmit}>
+                                <div className="oauth-input-group">
+                                    <label>Email or Username</label>
+                                    <input
+                                        type="text"
+                                        placeholder="user@example.com"
+                                        className="oauth-input"
+                                        value={oauthCredentials.username}
+                                        onChange={(e) => setOauthCredentials({ ...oauthCredentials, username: e.target.value })}
+                                        autoFocus
+                                    />
                                 </div>
-                                <h3 className="oauth-title">Connecting to {oauthTarget.name}</h3>
-                                <p className="oauth-desc">
-                                    Please wait while we securely connect your account...
-                                </p>
-                                <div className="oauth-progress">
-                                    <div className="oauth-progress-bar" style={{ width: `${oauthProgress}%` }} />
+                                <div className="oauth-input-group">
+                                    <label>Password</label>
+                                    <input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        className="oauth-input"
+                                        value={oauthCredentials.password}
+                                        onChange={(e) => setOauthCredentials({ ...oauthCredentials, password: e.target.value })}
+                                    />
+                                </div>
+                                <button type="submit" className="oauth-primary-btn" style={{ background: oauthTarget.color }}>
+                                    Sign In & Connect
+                                </button>
+                                <p className="oauth-helper-text">This is a simulation. Enter any value.</p>
+                            </form>
+                        )}
+
+                        {/* Progress Phase */}
+                        {oauthPhase === 'progress' && (
+                            <div className="oauth-progress-container">
+                                <div className="oauth-spinner-ring" style={{ borderTopColor: oauthTarget.color }}></div>
+                                <div className="oauth-progress-bar-track">
+                                    <div className="oauth-progress-bar-fill" style={{ width: `${oauthProgress}%`, background: oauthTarget.color }} />
                                 </div>
                                 <p className="oauth-status-text">{oauthStep}</p>
-                            </>
+                            </div>
                         )}
+
+                        {/* Success Phase */}
                         {oauthPhase === 'success' && (
-                            <>
+                            <div className="oauth-success-container">
                                 <div className="oauth-success-icon">✓</div>
-                                <h3 className="oauth-title">{oauthTarget.name} Connected!</h3>
                                 <p className="oauth-desc">
-                                    Your account has been successfully linked. You're all set to publish.
+                                    Your <strong>{oauthTarget.name}</strong> account has been successfully linked to DIYA.
                                 </p>
-                                <button className="oauth-done-btn" onClick={completeOAuth}>Done</button>
-                            </>
+                                <button className="oauth-primary-btn success" onClick={completeOAuth}>
+                                    Done
+                                </button>
+                            </div>
                         )}
+
                     </div>
                 </div>
             )}

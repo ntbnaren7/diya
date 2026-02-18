@@ -190,10 +190,6 @@ export default function ConnectSocialsPage() {
         return initial;
     });
 
-    // Publishing toggles
-    const [autoSchedule, setAutoSchedule] = useState(true);
-    const [manualReview, setManualReview] = useState(false);
-
     // OAuth Modal
     const [oauthTarget, setOauthTarget] = useState(null);
     const [oauthPhase, setOauthPhase] = useState('idle');
@@ -267,20 +263,20 @@ export default function ConnectSocialsPage() {
                         const el = subtitleRef.current;
                         el.style.opacity = '1';
                         let iteration = 0;
-                        // Slower interval: 50ms (was 30ms)
+                        // Instant interval: 20ms
                         const interval = setInterval(() => {
                             el.textContent = finalText.split('').map((char, i) => {
                                 if (i < iteration) return finalText[i];
                                 if (char === ' ') return ' ';
                                 return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
                             }).join('');
-                            // Smaller increment: 0.5 (was 2) for longer duration
-                            iteration += 0.5;
+                            // Instant increment: 2.0 for very fast reveal
+                            iteration += 2.0;
                             if (iteration > finalText.length) {
                                 el.textContent = finalText;
                                 clearInterval(interval);
                             }
-                        }, 50);
+                        }, 20);
                     }
                 }, null, '-=0.4')
                 // 3. Counter pill pops in
@@ -478,25 +474,29 @@ export default function ConnectSocialsPage() {
                             data-platform={platform.id}
                             onMouseMove={handleCardMouseMove}
                             onMouseLeave={handleCardMouseLeave}
+                            style={{ '--platform-color': platform.color }}
                         >
-                            <div className="platform-card-top">
-                                <div className="platform-logo" style={{ background: platform.color }}>
-                                    <Icon size={22} />
+                            <div className="platform-logo-container">
+                                <div className="platform-logo" style={{ color: platform.color }}>
+                                    <Icon size={32} />
                                 </div>
-                                <span className={`status-badge ${status.replace('_', '-')}`}>
-                                    <span className={`status-dot ${status.replace('_', '-')}`} />
-                                    {status === 'connected' ? 'Connected'
-                                        : status === 'warning' ? 'Reconnect'
-                                            : 'Not Connected'}
-                                </span>
                             </div>
 
-                            <h3 className="platform-name">{platform.name}</h3>
-                            <p className="platform-desc">{platform.desc}</p>
+                            <span className={`status-badge ${status.replace('_', '-')}`}>
+                                <span className={`status-dot ${status.replace('_', '-')}`} />
+                                {status === 'connected' ? 'Connected'
+                                    : status === 'warning' ? 'Reconnect'
+                                        : 'Not Connected'}
+                            </span>
+
+                            <div className="platform-info">
+                                <h3 className="platform-name">{platform.name}</h3>
+                                <p className="platform-desc">{platform.desc}</p>
+                            </div>
 
                             {status === 'not_connected' && (
                                 <button className="platform-action-btn connect" onClick={() => startOAuth(platform)}>
-                                    Connect
+                                    Connect <span style={{ opacity: 0.6 }}>→</span>
                                 </button>
                             )}
                             {status === 'connected' && (
@@ -524,30 +524,7 @@ export default function ConnectSocialsPage() {
                 </div>
             </div>
 
-            {/* Publishing Behavior */}
-            <div className="publishing-section">
-                <h4 className="publishing-title">Default publishing behavior</h4>
-                <div className="publishing-option">
-                    <span className="publishing-label">Auto-schedule approved posts</span>
-                    <button
-                        className={`toggle-switch ${autoSchedule ? 'active' : ''}`}
-                        onClick={() => setAutoSchedule(!autoSchedule)}
-                        aria-label="Toggle auto-schedule"
-                    >
-                        <span className="toggle-knob" />
-                    </button>
-                </div>
-                <div className="publishing-option">
-                    <span className="publishing-label">Require manual review before publishing</span>
-                    <button
-                        className={`toggle-switch ${manualReview ? 'active' : ''}`}
-                        onClick={() => setManualReview(!manualReview)}
-                        aria-label="Toggle manual review"
-                    >
-                        <span className="toggle-knob" />
-                    </button>
-                </div>
-            </div>
+
 
             {/* Notice */}
             {connectedCount === 0 && (

@@ -135,6 +135,31 @@ export default function CanvasPreview({
                     )
                 }
 
+                if (layer.type === 'image') {
+                    return (
+                        <div
+                            key={layer.id}
+                            className={`ie-canvas-image ${selectedId === layer.id ? 'ie-canvas-image--selected' : ''}`}
+                            style={{
+                                left: layer.x,
+                                top: layer.y,
+                                width: layer.width,
+                                opacity: layer.opacity,
+                                cursor: dragging?.id === layer.id ? 'grabbing' : 'move',
+                            }}
+                            onPointerDown={(e) => handlePointerDown(e, layer)}
+                        >
+                            <img
+                                className="ie-canvas-image__img"
+                                src={layer.src}
+                                alt={layer.name || 'Uploaded image'}
+                                draggable={false}
+                            />
+                            {selectedId === layer.id && <SelectionOverlay />}
+                        </div>
+                    )
+                }
+
                 return null
             })}
         </div>

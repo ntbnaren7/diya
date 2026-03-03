@@ -235,5 +235,96 @@ export default function PropertiesPanel({ layer, onUpdate, onDelete }) {
         )
     }
 
+    /* ── Image Properties ─────────────────────────────────────── */
+    if (layer.type === 'image') {
+        return (
+            <div>
+                <div className="ie-section">
+                    <div className="ie-section__title">Image Properties</div>
+
+                    {/* Name */}
+                    <div className="ie-prop-group">
+                        <label className="ie-prop-label">Name</label>
+                        <input
+                            className="ie-prop-input"
+                            type="text"
+                            value={layer.name || ''}
+                            onChange={(e) => handleChange('name', e.target.value)}
+                        />
+                    </div>
+
+                    {/* Size */}
+                    <div className="ie-prop-group">
+                        <label className="ie-prop-label">Size (width)</label>
+                        <input
+                            type="range"
+                            className="ie-prop-slider"
+                            min={20}
+                            max={400}
+                            value={layer.width}
+                            onChange={(e) => handleChange('width', Number(e.target.value))}
+                        />
+                        <input
+                            className="ie-prop-input"
+                            type="number"
+                            min={20}
+                            max={400}
+                            value={layer.width}
+                            onChange={(e) => handleChange('width', Number(e.target.value))}
+                        />
+                    </div>
+
+                    {/* Opacity */}
+                    <div className="ie-prop-group">
+                        <label className="ie-prop-label">Opacity</label>
+                        <input
+                            type="range"
+                            className="ie-prop-slider"
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            value={layer.opacity}
+                            onChange={(e) => handleChange('opacity', Number(e.target.value))}
+                        />
+                    </div>
+                </div>
+
+                {/* Position */}
+                <div className="ie-section">
+                    <div className="ie-section__title">Position</div>
+                    <div className="ie-prop-row">
+                        <div className="ie-prop-group">
+                            <label className="ie-prop-label">X</label>
+                            <input
+                                className="ie-prop-input"
+                                type="number"
+                                value={layer.x}
+                                onChange={(e) => handleChange('x', Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="ie-prop-group">
+                            <label className="ie-prop-label">Y</label>
+                            <input
+                                className="ie-prop-input"
+                                type="number"
+                                value={layer.y}
+                                onChange={(e) => handleChange('y', Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="ie-section">
+                    <div className="ie-section__title">Actions</div>
+                    <button className="ie-delete-btn" onClick={() => onDelete(layer.id)}>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5A.5.5 0 015.5 2h3a.5.5 0 01.5.5V4m1.5 0V12a1 1 0 01-1 1h-5a1 1 0 01-1-1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        Delete Layer
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
     return null
 }

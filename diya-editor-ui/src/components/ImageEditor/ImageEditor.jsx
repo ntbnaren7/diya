@@ -27,6 +27,7 @@ export default function ImageEditor({
     const rightRef = useRef(null)
     const toolbarRef = useRef(null)
     const actionBarRef = useRef(null)
+    const fileInputRef = useRef(null)
 
     /* ── Entrance Animation ─────────────────────────────────────── */
     useEffect(() => {
@@ -111,6 +112,7 @@ export default function ImageEditor({
         const newLayer = {
             id: `logo-${Date.now()}`,
             type: 'logo',
+            name: 'Logo',
             x: 200,
             y: 200,
             width: 60,
@@ -123,6 +125,42 @@ export default function ImageEditor({
             return next
         })
         setSelectedId(newLayer.id)
+    }, [pushHistory])
+
+    const addImageLayer = useCallback((file) => {
+        if (!file) return
+        const url = URL.createObjectURL(file)
+        const newLayer = {
+            id: `image-${Date.now()}`,
+            type: 'image',
+            name: file.name.replace(/\.[^.]+$/, ''),
+            src: url,
+            x: 100,
+            y: 100,
+            width: 120,
+            opacity: 1,
+            visible: true,
+        }
+        setLayers((prev) => {
+            const next = [...prev, newLayer]
+            pushHistory(next)
+            return next
+        })
+        setSelectedId(newLayer.id)
+    }, [pushHistory])
+
+    const handleFileChange = useCallback((e) => {
+        const file = e.target.files?.[0]
+        if (file) addImageLayer(file)
+        e.target.value = ''
+    }, [addImageLayer])
+
+    const renameLayer = useCallback((id, name) => {
+        setLayers((prev) => {
+            const next = prev.map((l) => (l.id === id ? { ...l, name } : l))
+            pushHistory(next)
+            return next
+        })
     }, [pushHistory])
 
     const toggleVisibility = useCallback((id) => {
@@ -147,6 +185,15 @@ export default function ImageEditor({
 
     return (
         <div className="ie-shell" ref={shellRef}>
+            {/* Hidden file input for image upload */}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+            />
+
             {/* Aurora ambient orbs */}
             <div className="ie-aurora ie-aurora--blue" />
             <div className="ie-aurora ie-aurora--purple" />
@@ -197,6 +244,8 @@ export default function ImageEditor({
                         onToggleVisibility={toggleVisibility}
                         onAddText={addTextLayer}
                         onAddLogo={addLogoLayer}
+                        onAddImage={() => fileInputRef.current?.click()}
+                        onRenameLayer={renameLayer}
                     />
                 </aside>
 
